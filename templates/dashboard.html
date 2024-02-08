@@ -8,13 +8,13 @@
        
         <header>
           <div class="container">
-            <a href="#" class="logo">Your <b>Website</b> Name </a>
+            <a href="#" class="logo"></a>
             <ul class="links">
-              <li>Home</li>
-              <li>Documentation </li>
-              <li>API's</li>
-              <li>Info</li>
-              <li>Get Started</li>
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+                <li>Documentation </li>
+              <li>Try our chatbot</li>
+              <li>Pricing</li>
+              <li><a href="{{ url_for('login') }}" class="get-started white-text">Get Started</a></li>
             </ul>
           </div>
           
@@ -32,14 +32,14 @@
                   </ul>
                   <a href="/logout" class="btn btn-dark">Logout</a>
               {% endif %}
-          </div>
+        </div>
           
         <div class="content">
           <div class="container">
             <div class="info">
               <h1>Looking to create and Deploy a chat assistant?</h1>
-              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus odit nihil ullam nesciunt quidem iste, Repellendus odit nihil</p>
-              <button>Get Started</button>
+              <p>Mtafsiri.io offers a powerful No-code builder that supports intent-driven and ChatGPT kind-like chatbots customized to your use case based on providers like OpenAI, Anthropic, and Cohere.</p>
+              <button>More About us</button>
             </div>
             <div class="image">
               <img src="https://i.postimg.cc/65QxYYzh/001234.png">
@@ -47,6 +47,7 @@
           </div>
         </div>
       </div>
+      
       <!-- End Landing Page -->
 
     

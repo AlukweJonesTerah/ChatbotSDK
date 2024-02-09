@@ -1,56 +1,23 @@
 {% extends 'base.html' %}
 {% block content %}
 
+
+<div class="container">
+  <h2>Welcome to the Dashboard</h2>
+
+    {% if user %}
+        <p>user information</p>
+        <ul>
+            <li>Name : {{ user[1] }}</li>
+            <li>Email : {{ user[2] }}</li>
+        </ul>
+        <a href="/logout" class="btn btn-dark">Logout</a>
+    {% endif %}
+</div>
+
+
+
 <body>
-
-      <!-- Start Landing Page -->
-      <div class="landing-page">
-       
-        <header>
-          <div class="container">
-            <a href="#" class="logo"></a>
-            <ul class="links">
-                <li><a href="{{ url_for('index') }}">Home</a></li>
-                <li>Documentation </li>
-              <li>Try our chatbot</li>
-              <li>Pricing</li>
-              <li><a href="{{ url_for('login') }}" class="get-started white-text">Get Started</a></li>
-            </ul>
-          </div>
-          
-        </header>
-        <!-- User authentication -->
-        <div class="container">
-          
-              {% if user %}
-              <h2>Welcome to your Dashboard</h2>
-
-                  <p>user information</p>
-                  <ul>
-                      <li>Name : {{ user[1] }}</li>
-                      <li>Email : {{ user[2] }}</li>
-                  </ul>
-                  <a href="/logout" class="btn btn-dark">Logout</a>
-              {% endif %}
-        </div>
-          
-        <div class="content">
-          <div class="container">
-            <div class="info">
-              <h1>Looking to create and Deploy a chat assistant?</h1>
-              <p>Mtafsiri.io offers a powerful No-code builder that supports intent-driven and ChatGPT kind-like chatbots customized to your use case based on providers like OpenAI, Anthropic, and Cohere.</p>
-              <button>More About us</button>
-            </div>
-            <div class="image">
-              <img src="https://i.postimg.cc/65QxYYzh/001234.png">
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <!-- End Landing Page -->
-
-    
     <!-- Chat bot UI start -->
     <div class="chat-screen">
         <div class="chat-header">

@@ -47,8 +47,17 @@ class LoginForm(FlaskForm):
 
 @app.route('/')
 def index():
-    return render_template('dashboard.html')
+    return render_template('index.html')
 
+@app.route('/setup_page')
+def setup_page():
+    return render_template('setup_page.html')
+
+@app.route('/model_setup')
+def model_setup():
+    return render_template('cards_models.html')
+    
+# auth set up
 @app.route('/register',methods=['GET','POST'])
 def register():
     form = RegisterForm()

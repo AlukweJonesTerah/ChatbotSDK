@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
-<link href="static/css/setup_page.css" rel="stylesheet" type="text/css" />
-<script src="static/css/setup_page.js" type="text/js" ></script>
+<link href="static/css/setup_page.css" rel="stylesheet" type="text/css"/>
+<script src="static/js/setup_page.js" type="text/js" ></script>
 
 
 <!-- Canvas -->
@@ -35,8 +35,10 @@
       </button>
 
       <button class="overlay__btn overlay__btn--colors">
+        <a href="{{url_for('model_setup')}}">
         <span>Start creating</span>
         <span class="overlay__btn-emoji">🎨</span>
+        </a>
       </button>
     </div>
   </div>

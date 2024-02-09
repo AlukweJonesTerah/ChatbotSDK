@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 <link href="static/css/cards_models.css" rel="stylesheet" type="text/css" />
-<script src="static/css/cards_models.js" type="text/js" ></script>
+<script src="static/js/cards_models.js" type="text/js" ></script>
 
 
 
@@ -12,7 +12,13 @@
       <div class="card__content">
         <div class="card__title">Large Language Model (LLM)</div>
         <p class="card__text">This is the shorthand for flex-grow, flex-shrink and flex-basis combined. The second and third parameters (flex-shrink and flex-basis) are optional. Default is 0 1 auto. </p>
-        <button class="btn btn--block card__btn">Get Started</button>
+        <span class="user_popup">
+          <a href="{{url_for('popup')}}">
+        <button class="btn btn--block card__btn popup-trigger">
+          Get Started
+        </button>
+      </a>
+      </span>
       </div>
     </div>
   </li>
@@ -22,7 +28,7 @@
       <div class="card__content">
         <div class="card__title">Transformer Model</div>
         <p class="card__text">This defines the ability for a flex item to grow if necessary. It accepts a unitless value that serves as a proportion. It dictates what amount of the available space inside the flex container the item should take up.</p>
-        <button class="btn btn--block card__btn">GET Started</button>
+        <button class="btn btn--block card__btn">Get Started</button>
       </div>
     </div>
   </li>
@@ -47,4 +53,73 @@
     </div>
   </li> -->
 </ul>
+{% endblock %}
+<!-- All scripts will go here -->
+{% block scripts %}
+    {{  super() }}
+
+    <!-- Timestamp formatting -->
+    {{ moment.include_moment() }}
+    <!-- End of timestamp formatting -->
+
+    <script>
+$('.menu li').on('click', function(){
+  $('.content').fadeIn(0);
+  $('.overlay').fadeIn(600);
+  var elementName = $(this).attr('name');
+  $('.content li.'+elementName).addClass("active");
+ var thisLi = ('.content li.'+elementName);
+  $(thisLi+" .content-wrap").delay(800).fadeIn(300);
+});
+
+$('.overlay').on('click', function(){
+    $('.content-wrap').fadeOut(50);
+    $('.content li').removeClass("active");
+    $('.content').delay(600).fadeOut("slow");
+    $(this).fadeOut(600);
+});
+
+
+        $(function () {
+            var timer = null;
+            $('.popup-trigger').hover(
+                function(event) {
+                    // mouse in the event handler
+                    var elem = $(event.currentTarget);
+                    timer = setTimeout(function() {
+                        timer = null;
+                        xhr = $.ajax(
+                            '/model_setup/' + elem.first().text().trim() + '/popup').done(
+                                function(data) {
+                                    xhr = null;
+                                    elem.popover({
+                                        trigger: 'manual',
+                                        html: true,
+                                        animation: false,
+                                        container: elem,
+                                        content: data
+                                    }).popover('show');
+                                    flask_moment_render_all();
+                                }
+                            );
+                    }, 500);
+                },
+                function(event) {
+                    // mouse out event handler
+                    var elem = $(event.currentTarget);
+                    if (timer) {
+                        clearTimeout(timer);
+                        timer = null;
+                    }
+                    else if (xhr) {
+                        xhr.abort();
+                        xhr = null;
+                    }
+                    else {
+                        elem.popover('destroy');
+                    }
+                }
+            )
+        });
+    </script>    
 {% endblock %}

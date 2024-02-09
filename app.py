@@ -5,23 +5,26 @@ from wtforms.validators import DataRequired, Email, ValidationError
 import bcrypt
 from flask_mysqldb import MySQL
 import pymysql
-from scripts.database_setup import setup_database 
-
-
-setup_database()
+from flask_bootstrap import Bootstrap
 
 app = Flask(__name__)
 
-
+# MySQL Configuration
+# app.config['MYSQL_HOST'] = 'localhost'
+# app.config['MYSQL_USER'] = 'root'
+# app.config['MYSQL_PASSWORD'] = ''
+# app.config['MYSQL_DB'] = 'mydatabase'
 app.secret_key = 'your_secret_key_here'
+bootstrap = Bootstrap(app)
+
+# mysql = MySQL(app)
 
 connection=pymysql.connect(
     host='localhost',
     user='root',
-    password='root',
-    database='db'
+    password='',
+    database='mydatabase'
 )
-
 
 
 class RegisterForm(FlaskForm):
@@ -49,6 +52,10 @@ class LoginForm(FlaskForm):
 def index():
     return render_template('index.html')
 
+@app.route('/about')
+def about_page():
+    return render_template('about.html')
+
 @app.route('/setup_page')
 def setup_page():
     return render_template('setup_page.html')
@@ -56,7 +63,24 @@ def setup_page():
 @app.route('/model_setup')
 def model_setup():
     return render_template('cards_models.html')
-    
+
+@app.route('/pricing')
+def pricing():
+    return render_template('pricing.html')
+
+@app.route('/gravity')
+def gravity():
+    return render_template('gravity.html')
+
+# @app.route('/model_setup/<model_name>/popup')
+@app.route('/model_setup/popup')
+def popup():
+    return render_template('popup.html')
+
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
 # auth set up
 @app.route('/register',methods=['GET','POST'])
 def register():

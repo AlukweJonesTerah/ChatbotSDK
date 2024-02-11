@@ -5,23 +5,25 @@ from wtforms.validators import DataRequired, Email, ValidationError
 import bcrypt
 from flask_mysqldb import MySQL
 import pymysql
+from scripts.database_setup import setup_database
+from scripts.auto_create import create_project_structure
+
+
+setup_database()
+create_project_structure('./apikey.json', '1234')
+
+
 
 app = Flask(__name__)
 
-# MySQL Configuration
-# app.config['MYSQL_HOST'] = 'localhost'
-# app.config['MYSQL_USER'] = 'root'
-# app.config['MYSQL_PASSWORD'] = ''
-# app.config['MYSQL_DB'] = 'mydatabase'
-app.secret_key = 'your_secret_key_here'
 
-# mysql = MySQL(app)
+app.secret_key = 'your_secret_key_here'
 
 connection=pymysql.connect(
     host='localhost',
     user='root',
-    password='',
-    database='mydatabase'
+    password='root',
+    database='db'
 )
 
 
@@ -50,6 +52,10 @@ class LoginForm(FlaskForm):
 @app.route('/')
 def index():
     return render_template('dashboard.html')
+
+@app.route('/pricing')
+def pricing():
+    return render_template('pricing.html')
 
 @app.route('/register',methods=['GET','POST'])
 def register():
@@ -110,7 +116,7 @@ def dashboard():
 def logout():
     session.pop('user_id', None)
     flash("You have been logged out successfully.")
-    return redirect(url_for('login'))
+    return redirect(url_for('index'))
 
 
 

@@ -132,7 +132,20 @@ def main():
 if __name__ == '__main__':
     main()
                        """)
-        logging.info('[itsKios-09]: running creating app.py.....')
+            with open(os.path.join(root_folder, '.env'), 'w') as file:
+                file.write(""" Get the user api key from openai and save it here""")
+        
+            with open(os.path.join(root_folder, 'apikey.json'), 'w') as file:
+                file.write(""" Get the user api key from openai and save it here""")
+
+
+            with open(os.path.join(root_folder, 'readme.md'), 'w') as file:
+                file.write(""" README.MD file, write the chatbot description here""")
+        logging.info('[itsKios-09]: running creating .env.....')
+        logging.info('[itsKios-09]: running creating apikey.json .....')
+        logging.info('[itsKios-09]: running creating readme.md .....')
+
+
 
         return
     else:

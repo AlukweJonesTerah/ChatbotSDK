@@ -133,27 +133,6 @@ def logout():
 
 
 
-class LLM:
-    def get_dataset():
-        pass
-
-    def get_api_key():
-        pass
-
-    def clean_dataset():
-        pass
-
-    def get_template():
-        pass
-
-    def create_bot():
-        pass
-
-    def export_bot():
-        pass
-
-
-
 # trial chatbot
 
 

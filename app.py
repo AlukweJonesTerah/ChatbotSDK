@@ -1,9 +1,8 @@
-from flask import Flask, render_template, redirect, url_for, session, flash
+from flask import Flask, render_template, redirect, url_for, session, flash, request, url_for
 from flask_wtf import FlaskForm
 from wtforms import StringField,PasswordField,SubmitField
 from wtforms.validators import DataRequired, Email, ValidationError
 import bcrypt
-from flask_mysqldb import MySQL
 import pymysql
 from scripts.database_setup import setup_database
 from scripts.auto_create import create_project_structure
@@ -16,17 +15,20 @@ import numpy as np
 import pickle
 from nltk.stem import WordNetLemmatizer
 import nltk
-nltk.download('popular')
+import os
+from werkzeug.utils import secure_filename
 
-#setup_database()
-create_project_structure('./apikey.json', '1234')
+nltk.download('popular', quiet=True)
+
+setup_database()
+# create_project_structure('./apikey.json', '1234')
 
 
 
 app = Flask(__name__)
 
 
-app.secret_key = 'your_secret_key_here'
+app.secret_key = os.urandom(24)
 
 connection=pymysql.connect(
     host='localhost',
@@ -57,6 +59,13 @@ class LoginForm(FlaskForm):
     submit = SubmitField("Login")
 
 
+# file file_upload logic
+UPLOAD_FOLDER = '/path/to/the/uploads'
+ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
+
+app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
 
 @app.route('/')
 def index():
@@ -69,6 +78,67 @@ def about_page():
 @app.route('/pricing')
 def pricing():
     return render_template('pricing.html')
+
+@app.route('/setup_page')
+def setup_page():
+    return render_template('setup_page.html')
+
+@app.route('/model_setup')
+def model_setup():
+    return render_template('cards_models.html')
+
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+@app.route('/model_setup/file_upload', methods=['GET', 'POST'])
+def file_upload():
+    if request.method == 'POST':
+        api_key = request.form.get('api_key')
+        try:
+            # Check if API key is provided
+            if not api_key:
+                flash('API key is required')
+                return redirect(request.url)
+        
+            # check if the post request has the file part
+            if 'file' not in request.files:
+                flash('No file part')
+                return redirect(request.url)
+            file = request.files['file']
+            # If the user does not select a file, the browser submits an
+            # empty file without a filename.
+            if file.filename == '':
+                flash('No selected file')
+                return redirect(request.url)
+            if file and allowed_file(file.filename):
+                filename = secure_filename(file.filename)
+                filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                if os.path.exists(filepath):
+                    flash('File already exists')
+                    return redirect(request.url)
+                file.save(filepath)
+                # Check if the file is empty
+                if os.path.getsize(filepath) == 0:
+                    flash('The selected file is empty')
+                    os.remove(filepath)  # Remove the empty file
+                    return redirect(request.url)
+                return redirect(url_for('download_file', name=filename))
+        except (FileExistsError, PermissionError, IOError, ValueError) as e:
+            # Handle specific exceptions
+            flash(f'An error occurred: {str(e)}')
+            return redirect(request.url)
+        except Exception as e:
+            # Handle any other unexpected exceptions
+            flash(f'An unexpected error occurred: {str(e)}')
+            return redirect(request.url)
+    # For GET requests or invalid POST requests, render the file upload form
+    return render_template('file_upload_form.html')
+
+
+
+
 
 @app.route('/register',methods=['GET','POST'])
 def register():
@@ -209,4 +279,4 @@ def get_bot_response():
     return chatbot_response(userText)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='*', port=8000)

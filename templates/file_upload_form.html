@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/file_upload_form.css') }}">
+
+<div class="login">
+    <div class="login-triangle"></div>
+    <h2 class="login-header">Dataset and API Upload</h2>
+  
+    <form class="login-container" method="post" enctype="multipart/form-data">
+        <p><input type="text" name="api_key" placeholder="API Key"></p>
+        <input type="file" name="file">
+        <p><input type="submit" value="Upload"></p>
+    </form>
+</div>
+
+{% endblock %}

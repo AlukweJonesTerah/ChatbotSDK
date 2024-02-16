@@ -7,7 +7,7 @@ def setup_database():
     connection = pymysql.connect(
         host="localhost",
         user="root",
-        password="root"
+        password=""
     )
 
     with connection.cursor() as cursor:
